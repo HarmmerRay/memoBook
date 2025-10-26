@@ -62,6 +62,22 @@ class MemoBookApp {
         return true;
       }
     });
+
+    ipcMain.handle('move-window', async (_, deltaX: number, deltaY: number) => {
+      this.windowManager.moveWindow(deltaX, deltaY);
+    });
+
+    ipcMain.handle('hide-window', async () => {
+      this.windowManager.hideWindow();
+    });
+
+    ipcMain.handle('show-window', async () => {
+      this.windowManager.showWindow();
+    });
+
+    ipcMain.handle('get-window-bounds', async () => {
+      return this.windowManager.getWindowBounds();
+    });
   }
 
   setupTray(): void {

@@ -17,7 +17,7 @@ class SQLiteDatabaseService implements DatabaseService {
       CREATE TABLE IF NOT EXISTS todos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         content TEXT NOT NULL,
-        createdDate TEXT NOT NULL,
+        createdDate TEXT NOT NULL, 
         status TEXT NOT NULL DEFAULT 'pending'
       )
     `);

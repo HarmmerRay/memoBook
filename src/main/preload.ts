@@ -8,4 +8,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   playSound: (type: 'add' | 'complete' | 'delete') => ipcRenderer.invoke('play-sound', type),
   getAutoLaunchStatus: () => ipcRenderer.invoke('get-auto-launch-status'),
   toggleAutoLaunch: () => ipcRenderer.invoke('toggle-auto-launch'),
+  moveWindow: (deltaX: number, deltaY: number) => ipcRenderer.invoke('move-window', deltaX, deltaY),
+  hideWindow: () => ipcRenderer.invoke('hide-window'),
+  showWindow: () => ipcRenderer.invoke('show-window'),
+  getWindowBounds: () => ipcRenderer.invoke('get-window-bounds'),
 });
