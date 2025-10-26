@@ -144,11 +144,11 @@ class MemoBookApp {
     const platform = process.platform;
     const modifier = platform === 'darwin' ? 'Cmd' : 'Ctrl';
 
-    globalShortcut.register(`${modifier}+Alt+Q`, () => {
+    globalShortcut.register(`${modifier}+Shift+Q`, () => {
       this.windowManager.showInputWindow();
     });
 
-    globalShortcut.register(`${modifier}+Alt+P`, () => {
+    globalShortcut.register(`${modifier}+Shift+P`, () => {
       this.windowManager.toggleListWindow();
     });
   }

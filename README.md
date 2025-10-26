@@ -13,10 +13,10 @@
 
 ## 快捷键
 
-- **macOS**: `Cmd+Alt+Q` - 打开事项输入窗口
+- **macOS**: `Cmd+Shift+Q` - 打开事项输入窗口
 - **Windows/Linux**: `Ctrl+Alt+Q` - 打开事项输入窗口
 
-- **macOS**: `Cmd+Alt+P` - 切换事项列表显示
+- **macOS**: `Cmd+Shift+P` - 切换事项列表显示
 - **Windows/Linux**: `Ctrl+Alt+P` - 切换事项列表显示
 
 ## 技术栈

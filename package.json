@@ -1,11 +1,12 @@
 {
   "name": "memobook",
   "version": "1.0.0",
-  "main": "src/main/main-simple.js",
+  "main": "dist/main/main.js",
   "scripts": {
     "build": "webpack && tsc",
     "start": "electron .",
     "dev": "pnpm run build && electron .",
+    "demo": "pnpm run build && NODE_ENV=demo electron .",
     "pack": "electron-builder"
   },
   "keywords": [],

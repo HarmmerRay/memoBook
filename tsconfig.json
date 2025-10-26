@@ -1,21 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["DOM", "DOM.Iterable", "ES6"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": false,
-    "jsx": "react-jsx",
-    "module": "ESNext",
-    "declaration": true,
-    "outDir": "./dist"
+    "target": "ES2020",                      // 指定 TypeScript 编译后输出的 JavaScript 版本为 ES2020
+    "lib": ["DOM", "DOM.Iterable", "ES6"],   // 指定编译过程中需要包含的库文件，有 DOM、DOM.Iterable 和 ES6
+    "allowJs": true,                         // 允许 TypeScript 编译器处理 .js 文件
+    "skipLibCheck": true,                    // 跳过库文件的类型检查，加快编译速度
+    "esModuleInterop": true,                 // 允许使用 ES6 风格的默认导入，兼容 CommonJS
+    "allowSyntheticDefaultImports": true,    // 允许从没有默认导出的模块默认导入
+    "strict": true,                          // 启用所有严格类型检查选项
+    "forceConsistentCasingInFileNames": true,// 强制文件名必须一致的大小写引用
+    "moduleResolution": "node",              // 模块解析策略为 node
+    "resolveJsonModule": true,               // 允许引入 .json 文件模块
+    "isolatedModules": true,                 // 每个文件都作为单独的模块处理，适用于如 Babel 等工具
+    "noEmit": false,                         // 允许编译输出现有文件，false 表示会输出
+    "jsx": "react-jsx",                      // 使用新版 React JSX 转换
+    "module": "CommonJS",                    // 生成 CommonJS 规范的模块（Electron 需要）
+    // "declaration": true,                     // 生成对应的 .d.ts 类型声明文件
+    "outDir": "./dist"                       // 指定输出目录为 ./dist
   },
   "include": [
     "src/**/*"

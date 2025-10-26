@@ -2,20 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import InputWindow from './components/InputWindow';
 import TodoList from './components/TodoList';
-
-declare global {
-  interface Window {
-    electronAPI: {
-      addTodo: (content: string) => Promise<any>;
-      getTodos: () => Promise<any[]>;
-      updateTodo: (id: number, updates: any) => Promise<boolean>;
-      deleteTodo: (id: number) => Promise<boolean>;
-      playSound: (type: 'add' | 'complete' | 'delete') => Promise<void>;
-      getAutoLaunchStatus: () => Promise<boolean>;
-      toggleAutoLaunch: () => Promise<boolean>;
-    };
-  }
-}
+import './global';
 
 const App: React.FC = () => {
   // 根据 URL hash 显示不同的组件

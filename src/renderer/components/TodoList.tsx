@@ -6,12 +6,101 @@ const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editText, setEditText] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isHidden, setIsHidden] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const soundManager = useRef(new SoundManager());
+  const dragRef = useRef({ startX: 0, startY: 0, windowStartX: 0, windowStartY: 0 });
 
   useEffect(() => {
     loadTodos();
   }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isDragging) {
+        handleDrag(e);
+      }
+    };
+
+    const handleMouseUp = () => {
+      if (isDragging) {
+        handleDragEnd();
+      }
+    };
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging]);
+
+  const handleMouseDown = async (e: React.MouseEvent) => {
+    if (e.currentTarget === e.target || (e.target as HTMLElement).closest('.drag-handle')) {
+      const bounds = await window.electronAPI.getWindowBounds();
+      if (bounds) {
+        setIsDragging(true);
+        dragRef.current = {
+          startX: e.screenX,
+          startY: e.screenY,
+          windowStartX: bounds.x,
+          windowStartY: bounds.y
+        };
+        e.preventDefault();
+      }
+    }
+  };
+
+  const handleDrag = async (e: MouseEvent) => {
+    const deltaX = e.screenX - dragRef.current.startX;
+    const deltaY = e.screenY - dragRef.current.startY;
+    const newX = dragRef.current.windowStartX + deltaX;
+    const newY = dragRef.current.windowStartY + deltaY;
+
+    try {
+      const bounds = await window.electronAPI.getWindowBounds();
+      if (bounds) {
+        const windowHeight = bounds.height;
+
+        // Move window to new position
+        await window.electronAPI.moveWindow(newX, newY);
+
+        // Check if window is at screen top edge
+        if (newY <= 0) {
+          if (!isHidden) {
+            setIsHidden(true);
+            // Hide window above screen
+            await window.electronAPI.moveWindow(newX, -windowHeight + 10); // Leave 10px visible for hover detection
+          }
+        } else {
+          if (isHidden) {
+            setIsHidden(false);
+          }
+        }
+
+        setPosition({ x: newX, y: newY });
+      }
+    } catch (error) {
+      console.error('Failed to move window:', error);
+    }
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseEnter = async () => {
+    if (isHidden) {
+      setIsHidden(false);
+      await window.electronAPI.moveWindow(position.x, 0);
+    }
+  };
 
   const loadTodos = async () => {
     try {
@@ -78,6 +167,8 @@ const TodoList: React.FC = () => {
       ref={listRef}
       onKeyDown={handleKeyDown}
       tabIndex={0}
+      onMouseDown={handleMouseDown}
+      onMouseEnter={handleMouseEnter}
       style={{
         width: '100%',
         height: '100vh',
@@ -90,16 +181,32 @@ const TodoList: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
+        cursor: isDragging ? 'grabbing' : 'default',
+        userSelect: isDragging ? 'none' : 'auto',
       }}
     >
-      <div style={{
-        padding: '16px',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-        color: 'white',
-        fontSize: '14px',
-        fontWeight: 'bold',
-      }}>
-        事项列表
+      <div
+        className="drag-handle"
+        style={{
+          padding: '16px',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          color: 'white',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          cursor: 'grab',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <span>事项列表</span>
+        <span style={{
+          fontSize: '10px',
+          color: 'rgba(255, 255, 255, 0.5)',
+          cursor: 'grab'
+        }}>
+          ⋮⋮ 拖动
+        </span>
       </div>
 
       <div style={{
