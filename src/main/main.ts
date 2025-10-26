@@ -154,8 +154,24 @@ class MemoBookApp {
   }
 
   playSound(type: 'add' | 'complete' | 'delete'): void {
-    // 这里使用系统声音，后续可以替换为音频文件
-    // 由于Electron的音频播放限制，我们在渲染进程中处理
+    try {
+      const soundFile = path.join(__dirname, `../assets/sounds/${type}.wav`);
+      const { exec } = require('child_process');
+      const platform = process.platform;
+      
+      if (platform === 'darwin') {
+        // macOS
+        exec(`afplay "${soundFile}"`);
+      } else if (platform === 'win32') {
+        // Windows
+        exec(`powershell -c (New-Object Media.SoundPlayer "${soundFile}").PlaySync();`);
+      } else {
+        // Linux
+        exec(`aplay "${soundFile}"`);
+      }
+    } catch (error) {
+      console.error('Failed to play sound:', error);
+    }
   }
 
   async initialize(): Promise<void> {
